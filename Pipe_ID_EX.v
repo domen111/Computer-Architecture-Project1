@@ -3,8 +3,8 @@ module ID_EX
     // Inputs
     input clk_i,
     input rst_i,
-    input flush_i,      // Flush (lowest priority)
-    input stall_i,      // Stall (2nd highest priority)
+    input flush_i,
+    input stall_i,
     
     // Pipe in/out
     input      [31:0] pc_i,
@@ -25,22 +25,18 @@ module ID_EX
     output reg        EX_o
 );
 
-// Asynchronous output driver
 always @(posedge clk_i or negedge rst_i) begin
     if( !rst_i ) begin
-        // Initialize outputs to 0s
         instruction_o <= 0;
         pc_o <= 0;
     end
     else begin
         if( !stall_i ) begin
             if( flush_i ) begin
-                // Pass through all 0s
                 instruction_o <= 0;
                 pc_o <= 0;
             end
             else begin
-                // Pass through signals
                 pc_o <= pc_i;
                 data1_o <= data1_i;
                 data2_o <= data2_i;
