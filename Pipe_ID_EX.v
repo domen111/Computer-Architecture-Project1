@@ -5,14 +5,24 @@ module ID_EX
     input rst_i,
     input flush_i,      // Flush (lowest priority)
     input stall_i,      // Stall (2nd highest priority)
-    input imembubble_i, // fetched inst is bogus due to icache miss
     
     // Pipe in/out
-    input [31:0] pc_i,
+    input      [31:0] pc_i,
     output reg [31:0] pc_o,
-    input [31:0] instruction_i,
+    input      [31:0] data1_i,
+    output reg [31:0] data1_o,
+    input      [31:0] data2_i,
+    output reg [31:0] data2_o,
+    input      [31:0] sign_extended_i,
+    output reg [31:0] sign_extended_o,
+    input      [31:0] instruction_i,
     output reg [31:0] instruction_o,
-    output reg imembubble_o
+    input             WB_i,
+    output reg        WB_o,
+    input             M_i,
+    output reg        M_o,
+    input             EX_i,
+    output reg        EX_o
 );
 
 // Asynchronous output driver
@@ -31,9 +41,14 @@ always @(posedge clk_i or negedge rst_i) begin
             end
             else begin
                 // Pass through signals
-                instruction_o <= instruction_i;
                 pc_o <= pc_i;
-                imembubble_o <= imembubble_i;
+                data1_o <= data1_i;
+                data2_o <= data2_i;
+                sign_extended_o <= sign_extended_i;
+                instruction_o <= instruction_i;
+                WB_o <= WB_i;
+                M_o <= M_i;
+                EX_o <= EX_i;
             end
         end
     end
