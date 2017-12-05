@@ -42,7 +42,7 @@ IF_ID Pipe_IF_ID(
     .pc_i          (pc),
     .pc_o          (),
     .instruction_i (Instruction_Memory.instr_o),
-    .instruction_o (inst),
+    .instruction_o (inst)
     // .imembubble_o  ()
 );
 

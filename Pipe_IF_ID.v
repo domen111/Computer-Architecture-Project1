@@ -11,7 +11,7 @@ module IF_ID
     input [31:0] pc_i,
     output reg [31:0] pc_o,
     input [31:0] instruction_i,
-    output reg [31:0] instruction_o,
+    output reg [31:0] instruction_o
     // output reg imembubble_o
 );
 
