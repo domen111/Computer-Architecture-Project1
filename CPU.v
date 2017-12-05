@@ -37,13 +37,13 @@ IF_ID Pipe_IF_ID(
     .rst_i         (rst_i),
     .flush_i       (1'd0),
     .stall_i       (1'd0),
-    .imembubble_i  (1'd0),
+    // .imembubble_i  (1'd0),
 
     .pc_i          (pc),
     .pc_o          (),
     .instruction_i (Instruction_Memory.instr_o),
     .instruction_o (inst),
-    .imembubble_o  ()
+    // .imembubble_o  ()
 );
 
 // --------- ID stage [begin] --------- //
