@@ -23,14 +23,12 @@ module MEM_WB
 always @(posedge clk_i or negedge rst_i) begin
     if( !rst_i ) begin
         // Initialize outputs to 0s
-        instruction_o <= 0;
         pc_o <= 0;
     end
     else begin
         if( !stall_i ) begin
             if( flush_i ) begin
                 // Pass through all 0s
-                instruction_o <= 0;
                 pc_o <= 0;
             end
             else begin
