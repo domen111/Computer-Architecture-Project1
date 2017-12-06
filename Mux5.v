@@ -1,4 +1,4 @@
-module MUX5
+module Mux5
 (
     data0_i,
     data1_i,

@@ -27,12 +27,12 @@ PC PC(
     .pc_o       (pc)
 );
 Instruction_Memory Instruction_Memory(
-    .addr_i     (pc), 
+    .addr_i     (pc),
     .instr_o    ()
 );
 // --------- [end] IF stage --------- //
 
-IF_ID Pipe_IF_ID(
+IF_ID IF_ID(
     .clk_i         (clk_i),
     .rst_i         (rst_i),
     .flush_i       (1'd0),
@@ -70,18 +70,66 @@ MUX5 MUX_RegDst(
     .select_i   (Control.RegDst_o),
     .data_o     (Registers.RDaddr_i)
 );
-MUX32 MUX_ALUSrc(
-    .data0_i    (Registers.RTdata_o),
-    .data1_i    (Sign_Extend.data_o),
-    .select_i   (Control.ALUSrc_o),
-    .data_o     (ALU.data2_i)
-);
 Sign_Extend Sign_Extend(
     .data_i     (inst[15:0]),
-    .data_o     (MUX_ALUSrc.data1_i)
+    .data_o     ()
+);
+Mux10 mux8(
+    .data0_i    (),
+    .data1_i    (),
+    .select_i   (),
+    .data_o     ()
 );
 // --------- [end] ID stage --------- //
 
+ID_EX ID_EX(
+    .clk_i           (clk_i),
+    .rst_i           (rst_i),
+    .flush_i         (1'd0),
+    .stall_i         (1'd0),
+
+    .pc_i            (IF_ID.pc_o),
+    .pc_o            (),
+    .data1_i         (Registers.data1_o),
+    .data1_o         (mux6.data0_i),
+    .data2_i         (Registers.data2_o),
+    .data2_o         (mux7.data0_i),
+    .sign_extended_i (Sign_Extend.data_o),
+    .sign_extended_o (),
+    .instruction_i   (inst),
+    .instruction_o   (),
+    .WB_i            (),
+    .WB_o            (),
+    .M_i             (),
+    .M_o             (),
+    .EX_i            (),
+    .EX_o            ()
+);
+
+// --------- EX stage [begin] --------- //
+Mux32 mux6(
+    .data0_i    (),
+    .data1_i    (),
+    .select_i   (),
+    .data_o     ()
+);
+Mux32 mux7(
+    .data0_i    (),
+    .data1_i    (),
+    .select_i   (),
+    .data_o     ()
+);
+Mux32 mux4(
+    .data0_i    (),
+    .data1_i    (),
+    .select_i   (),
+    .data_o     ()
+);
+ALU_Control ALU_Control(
+    .funct_i    (inst[5:0]),
+    .ALUOp_i    (Control.ALUOp_o),
+    .ALUCtrl_o  (ALU.ALUCtrl_i)
+);
 ALU ALU(
     .data1_i    (Registers.RSdata_o),
     .data2_i    (),
@@ -89,12 +137,7 @@ ALU ALU(
     .data_o     (),
     .Zero_o     ()
 );
-
-ALU_Control ALU_Control(
-    .funct_i    (inst[5:0]),
-    .ALUOp_i    (Control.ALUOp_o),
-    .ALUCtrl_o  (ALU.ALUCtrl_i)
-);
+// --------- [end] EX stage --------- //
 
 endmodule
 
