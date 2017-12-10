@@ -108,8 +108,8 @@ ID_EX ID_EX(
 
 // --------- EX stage [begin] --------- //
 Mux32 mux6(
-    .data0_i    (),
-    .data1_i    (),
+    .data0_i    (ID_EX.data1_o),
+    .data1_i    (/*todo*/),
     .select_i   (),
     .data_o     ()
 );
@@ -127,12 +127,12 @@ Mux32 mux4(
 );
 ALU_Control ALU_Control(
     .funct_i    (inst[5:0]),
-    .ALUOp_i    (Control.ALUOp_o),
+    .ALUOp_i    (ID_EX.ALUOp_o),
     .ALUCtrl_o  (ALU.ALUCtrl_i)
 );
 ALU ALU(
-    .data1_i    (Registers.RSdata_o),
-    .data2_i    (),
+    .data1_i    (mux6.data_o),
+    .data2_i    (mux4.data_o),
     .ALUCtrl_i  (ALU_Control.ALUCtrl_o),
     .data_o     (),
     .Zero_o     ()
