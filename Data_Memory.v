@@ -13,10 +13,10 @@ reg [31:0] mem [0:127];
 
 always @(posedge clk_i) begin
 	if( memWrite_i ) begin
-        mem[addr_i] <= wdata_i;
+        mem[addr_i] <= wData_i;
 	end
 end
 
-assign rdata_o = memRead_i ? mem[addr_i][31:0]: wdata_i;
+assign rData_o = memRead_i ? mem[addr_i][31:0]: wData_i;
 
 endmodule
