@@ -35,7 +35,7 @@ Branch_And Branch_And(
 
 Mux32 mux2(
     .data0_i    (mux1.data_o),
-    .data1_i    (),
+    .data1_i    ({mux1.data_o[31:28], ShiftLeft2.data_o}),
     .select_i   (Control.Jump_o),
     .data_o     ()
 );
@@ -82,6 +82,11 @@ Hazard_Detection_Unit Hazard_Detection_Unit(
     .stall_o            ()
 );
 
+ShiftLeft2 ShiftLeft2(
+    .data_i (inst[25:0]),
+    .data_o ()
+);
+
 Control Control(
     .Op_i       (inst[31:26]),
     .RegDst_o   (),
@@ -119,7 +124,7 @@ MuxControl mux8
 );
 
 Adder ID_ADD(
-    .data1_i   (Sign_Extend.data_o),
+    .data1_i   (Sign_Extend.data_o << 2),
     .data2_i   (IF_ID.pc_o),
     .data_o     (mux1.data0_i)
 );
