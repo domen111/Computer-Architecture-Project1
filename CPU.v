@@ -182,26 +182,38 @@ ID_EX ID_EX(
 );
 
 // --------- EX stage [begin] --------- //
-Mux32 mux6(
+Mux32_3 mux6(
     .data0_i    (ID_EX.data1_o),
-    .data1_i    (/*todo*/),
-    .select_i   (),
+    .data1_i    (mux5.data_o),
+    .data2_i    (EX_MEM.ALU_Res_o),
+    .select_i   (Forwarding_Unit.EX_RsOverride_o),
     .data_o     ()
 );
-Mux32 mux7(
-    .data0_i    (),
-    .data1_i    (),
-    .select_i   (),
+Mux32_3 mux7(
+    .data0_i    (ID_EX.data2_o),
+    .data1_i    (mux5.data_o),
+    .data1_i    (EX_MEM.ALU_Res_o),
+    .select_i   (Forwarding_Unit.EX_RtOverride_o),
     .data_o     ()
 );
 Mux32 mux4(
-    .data0_i    (),
-    .data1_i    (),
-    .select_i   (),
+    .data0_i    (mux7.data_o),
+    .data1_i    (ID_EX.sign_extended_o),
+    .select_i   (ID_EX.ALUSrc_o),
     .data_o     ()
 );
+Forwarding_Unit Forwarding_Unit(
+    .ID_EX_RsAddr_i     (),
+    .ID_EX_RtAddr_i     (),
+    .EX_MEM_RegWrite_i  (),
+    .EX_MEM_RdAddr_i    (),
+    .MEM_WB_RegWrite_i  (),
+    .MEM_WB_RdAddr_i    (),
+    .EX_RsOverride_o    (),
+    .EX_RtOverride_o    ()
+);
 ALU_Control ALU_Control(
-    .funct_i    (inst[5:0]),
+    .funct_i    (ID_EX.instruction_o[5:0]),
     .ALUOp_i    (ID_EX.ALUOp_o),
     .ALUCtrl_o  (ALU.ALUCtrl_i)
 );
