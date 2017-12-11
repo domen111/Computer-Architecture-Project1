@@ -76,10 +76,10 @@ IF_ID IF_ID(
 
 // --------- ID stage [begin] --------- //
 Hazard_Detection_Unit Hazard_Detection_Unit(
-    .ID_EX_MemRead_i    (),
-    .IF_ID_RsAddr_i     (),
-    .IF_ID_RtAddr_i     (),
-    .ID_EX_RtAddr_i     (),
+    .ID_EX_MemRead_i    (ID_EX.MemRead_o),
+    .IF_ID_RsAddr_i     (IF_ID.RsAddr_o),
+    .IF_ID_RtAddr_i     (IF_ID.RtAddr_o),
+    .ID_EX_RtAddr_i     (ID_EX.RtAddr_o),
     .PC_Stall_o         (),
     .IF_ID_Stall_o      (),
     .stall_o            ()
@@ -98,18 +98,18 @@ Control Control(
     .ALUOp_o    ()
 );
 
-MuxControl MuxControl
+MuxControl mux8
 (
-    .stall_i    (),
-    .RegDst_i   (),
-    .ALUSrc_i   (),
-    .MemToReg_i (),
-    .RegWrite_i (),
-    .MemWrite_i (),
-    .Branch_i   (),
-    .Jump_i     (),
-    .ExtOp_i    (),
-    .ALUOp_i    (),
+    .stall_i    (Hazard_Detection_Unit.stall_o),
+    .RegDst_i   (Control.RegDst_o),
+    .ALUSrc_i   (Control.ALUSrc_o),
+    .MemToReg_i (Control.MemToReg_o),
+    .RegWrite_i (Control.RegWrite_o),
+    .MemWrite_i (Control.MemWrite_o),
+    .Branch_i   (Control.Branch_o),
+    .Jump_i     (Control.Jump_o),
+    .ExtOp_i    (Control.ExtOp_o),
+    .ALUOp_i    (Control.ALUOp_o),
     .RegDst_o   (),
     .ALUSrc_o   (),
     .MemToReg_o (),
@@ -122,8 +122,8 @@ MuxControl MuxControl
 );
 
 Adder ID_ADD(
-    .data1_in   (IF_ID.pc_o),
-    .data2_in   (),
+    .data1_in   (Sign_Extend.data_o),
+    .data2_in   (IF_ID.pc_o),
     .data_o     (mux1.data0_i)
 );
 
@@ -151,9 +151,9 @@ Sign_Extend Sign_Extend(
 );
 
 Equal Equal(
-    .RSData_i   (),
-    .RTData_i   (),
-    .Equal_o    (Branch_And.Equal_i)
+    .RSData_i   (Registers.RSdata_o),
+    .RTData_i   (Registers.RTdata_o),
+    .Equal_o    ()
 );
 // --------- [end] ID stage --------- //
 
@@ -175,13 +175,13 @@ ID_EX ID_EX(
     .instruction_o   (),
 
     // Control Outputs
-    .RegDst_i        (Control.RegDst_o),
-    .ALUSrc_i        (Control.ALUSrc_o),
-    .MemToReg_i      (Control.MemToReg_o),
-    .RegWrite_i      (Control.RegWrite_o),
-    .MemWrite_i      (Control.MemWrite_o),
-    .ExtOp_i         (Control.ExtOp_o),
-    .ALUOp_i         (Control.ALUOp_o),
+    .RegDst_i        (mux8.RegDst_o),
+    .ALUSrc_i        (mux8.ALUSrc_o),
+    .MemToReg_i      (mux8.MemToReg_o),
+    .RegWrite_i      (mux8.RegWrite_o),
+    .MemWrite_i      (mux8.MemWrite_o),
+    .ExtOp_i         (mux8.ExtOp_o),
+    .ALUOp_i         (mux8.ALUOp_o),
     .RegDst_o        (),
     .ALUSrc_o        (),
     .MemToReg_o      (),
@@ -213,12 +213,12 @@ Mux32 mux4(
     .data_o     ()
 );
 Forwarding_Unit Forwarding_Unit(
-    .ID_EX_RsAddr_i     (),
-    .ID_EX_RtAddr_i     (),
-    .EX_MEM_RegWrite_i  (),
-    .EX_MEM_RdAddr_i    (),
-    .MEM_WB_RegWrite_i  (),
-    .MEM_WB_RdAddr_i    (),
+    .ID_EX_RsAddr_i     (ID_EX.RsAddr_o),
+    .ID_EX_RtAddr_i     (ID_EX.RtADdr_o),
+    .EX_MEM_RegWrite_i  (EX_MEM.RegWrite_o),
+    .EX_MEM_RdAddr_i    (EX_MEM.RdAddr_o),
+    .MEM_WB_RegWrite_i  (MEM_WB.RegWrite_o),
+    .MEM_WB_RdAddr_i    (MEM_WB.RdAddr_o),
     .EX_RsOverride_o    (),
     .EX_RtOverride_o    ()
 );
@@ -234,7 +234,7 @@ ALU ALU(
     .data_o     (),
     .Zero_o     ()
 );
-Mux5 mux8(
+Mux5 mux3(
     .data0_i    (ID_EX.instruction_o[20:16]),
     .data1_i    (ID_EX.instruction_o[15:11]),
     .select_i   (ID_EX.RegDst_o),
@@ -249,7 +249,7 @@ EX_MEM EX_MEM(
     .ALU_Res_o      (),
     .Write_Data_i   (mux7.data_o),
     .Write_Data_o   (),
-    .RdAddr_i       (mux8.data_o),
+    .RdAddr_i       (mux3.data_o),
     .RdAddr_o       (),
 
     .MemToReg_i     (ID_EX.MemToReg_o),
