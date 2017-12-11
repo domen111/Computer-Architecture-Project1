@@ -241,6 +241,61 @@ Mux5 mux8(
     .data_o     (/*todo*/)
 );
 // --------- [end] EX stage --------- //
+EX_MEM EX_MEM(
+    .clk_i          (clk_i),
+    .rst_i          (rst_i),
+    
+    .ALU_Res_i      (ALU.data_o),
+    .ALU_Res_o      (),
+    .Write_Data_i   (mux7.data_o),
+    .Write_Data_o   (),
+    .RdAddr_i       (mux8.data_o),
+    .RdAddr_o       (),
 
+    .MemToReg_i     (ID_EX.MemToReg_o),
+    .RegWrite_i     (ID_EX.RegWrite_o),
+    .MemWrite_i     (ID_EX.MemWrite_o),
+    .ExtOp_i        (ID_EX.ExtOp_o),
+    .MemToReg_o     (),
+    .RegWrite_o     (),
+    .MemWrite_o     (),
+    .ExtOp_o        (),
+);
+
+// --------- MEM stage [begin] --------- //
+Data_Memory Data_Memory(
+    .clk_i       (clk_i),
+    .addr_i      (EX_MEM.ALU_Res_o),
+    .memRead_i   (!EX_MEM.MemWrite_o), // weird
+    .memWrite_i  (EX_MEM.MemWrite_o),
+    .Write_Data_i(EX_MEM.Write_Data_o),
+    .Read_Data_o ()
+);
+// --------- [end] MEM stage --------- //
+MEM_WB MEM_WB(
+    // Inputs
+    .clk_i      (clk_i),
+    .rst_i      (rst_i),
+    
+    // Pipe in/out
+    .ALU_Res_i  (EX_MEM.ALU_Res_o),
+    .ALU_Res_o  (),
+    .Read_Data_i(Data_Memory.Read_Data_o),
+    .Read_Data_o(),
+    .RdAddr_i   (EX_MEM.RdAddr_o),
+    .RdAddr_o   (),
+    .MemToReg_i (EX_MEM.MemToReg_o),
+    .RegWrite_i (EX_MEM.RegWrite_o),
+    .MemToReg_o (),
+    .RegWrite_o ()
+);
+// --------- WB stage [begin] ------- //
+Mux32 mux5(
+    .data0_i    (MEM_WB.ALU_Res_o),
+    .data1_i    (MEM_WB.Read_Data_o),
+    .select_i   (MEM_WB.MemToReg_o),
+    .data_o     ()
+);
+// --------- [end] WB stage --------- //
 endmodule
 
