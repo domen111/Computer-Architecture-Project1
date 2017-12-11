@@ -18,16 +18,10 @@ module MEM_WB
 );
 
 always @(posedge clk_i or negedge rst_i) begin
-    if( !rst_i ) begin
-        pc_o <= 0;
-    end
-    else begin
-        pc_o <= pc_i;
-        ALU_Res_o <= ALU_Res_i;
-        Read_Data_o <= Read_Data_i;
-        Forward_Data_o <= Forward_Data_i;
-        WB_o <= WB_i;
-    end
+    ALU_Res_o <= ALU_Res_i;
+    Read_Data_o <= Read_Data_i;
+    MemToReg_o <= MemToReg_i;
+    RegWrite_o <= RegWrite_i;
 end
 
 endmodule
