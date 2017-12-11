@@ -224,6 +224,12 @@ ALU ALU(
     .data_o     (),
     .Zero_o     ()
 );
+Mux32 mux8(
+    .data0_i    (ID_EX.instruction_o[20:16]),
+    .data1_i    (ID_EX.instruction_o[15:11]),
+    .select_i   (ID_EX.RegDst_o),
+    .data_o     (/*todo*/)
+);
 // --------- [end] EX stage --------- //
 
 endmodule
