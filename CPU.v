@@ -133,18 +133,11 @@ Registers Registers(
     .clk_i      (clk_i),
     .RSaddr_i   (inst[25:21]),
     .RTaddr_i   (inst[20:16]),
-    .RDaddr_i   (MUX_RegDst.data_o),
-    .RDdata_i   (ALU.data_o),
+    .RDaddr_i   (MEM_WB.RdAddr_o),
+    .RDdata_i   (mux5.data_o),
     .RegWrite_i (Control.RegWrite_o),
     .RSdata_o   (),
     .RTdata_o   ()
-);
-
-Mux5 MUX_RegDst(
-    .data0_i    (inst[20:16]),
-    .data1_i    (inst[15:11]),
-    .select_i   (Control.RegDst_o),
-    .data_o     (Registers.RDaddr_i)
 );
 
 Sign_Extend Sign_Extend(
