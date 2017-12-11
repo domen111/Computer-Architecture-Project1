@@ -52,9 +52,13 @@ always @(posedge clk_i or negedge rst_i) begin
                 data2_o <= data2_i;
                 sign_extended_o <= sign_extended_i;
                 instruction_o <= instruction_i;
-                WB_o <= WB_i;
-                M_o <= M_i;
-                EX_o <= EX_i;
+                RegDst_o <= RegDst_i;
+                ALUSrc_o <= ALUSrc_i;
+                MemToReg_o <= MemToReg_i;
+                RegWrite_o <= RegWrite_i;
+                MemWrite_o <= MemWrite_i;
+                ExtOp_o <= ExtOp_i;
+                ALUOp_o <= ALUOp_i;
             end
         end
     end
