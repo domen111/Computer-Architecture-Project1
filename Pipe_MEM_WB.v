@@ -11,11 +11,10 @@ module MEM_WB
     output reg [31:0] Read_Data_o,
     input      [31:0] RdAddr_i,
     output reg [31:0] RdAddr_o,
-    input            MemToReg_i,
-    input            RegWrite_i,
-    output reg       MemToReg_o,
-    output reg       RegWrite_o,
-    output reg       MemWrite_o,
+    input             MemToReg_i,
+    input             RegWrite_i,
+    output reg        MemToReg_o,
+    output reg        RegWrite_o
 );
 
 always @(posedge clk_i or negedge rst_i) begin
