@@ -238,9 +238,10 @@ Mux5 mux3(
     .data0_i    (ID_EX.instruction_o[20:16]),
     .data1_i    (ID_EX.instruction_o[15:11]),
     .select_i   (ID_EX.RegDst_o),
-    .data_o     (/*todo*/)
+    .data_o     ()
 );
 // --------- [end] EX stage --------- //
+
 EX_MEM EX_MEM(
     .clk_i          (clk_i),
     .rst_i          (rst_i),
@@ -272,6 +273,7 @@ Data_Memory Data_Memory(
     .Read_Data_o ()
 );
 // --------- [end] MEM stage --------- //
+
 MEM_WB MEM_WB(
     // Inputs
     .clk_i      (clk_i),
@@ -289,6 +291,7 @@ MEM_WB MEM_WB(
     .MemToReg_o (),
     .RegWrite_o ()
 );
+
 // --------- WB stage [begin] ------- //
 Mux32 mux5(
     .data0_i    (MEM_WB.ALU_Res_o),
