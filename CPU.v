@@ -41,8 +41,8 @@ Mux32 mux2(
 );
 
 Adder Add_PC(
-    .data1_i   (pc),
-    .data2_i   (32'd4),
+    .data1_i    (pc),
+    .data2_i    (32'd4),
     .data_o     ()
 );
 
@@ -133,9 +133,9 @@ Registers Registers(
     .clk_i      (clk_i),
     .RSaddr_i   (inst[25:21]),
     .RTaddr_i   (inst[20:16]),
-    .RDaddr_i   (MEM_WB.RdAddr_o),
+    .RDaddr_i   (inst[15:11]),
     .RDdata_i   (mux5.data_o),
-    .RegWrite_i (Control.RegWrite_o),
+    .RegWrite_i (MEM_WB.RegWrite_o),
     .RSdata_o   (),
     .RTdata_o   ()
 );
