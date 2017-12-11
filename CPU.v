@@ -41,8 +41,8 @@ Mux32 mux2(
 );
 
 Adder Add_PC(
-    .data1_in   (pc),
-    .data2_in   (32'd4),
+    .data1_i   (pc),
+    .data2_i   (32'd4),
     .data_o     ()
 );
 
@@ -64,22 +64,19 @@ IF_ID IF_ID(
     .clk_i         (clk_i),
     .rst_i         (rst_i),
     .flush_i       (),
-    .stall_i       (Hazard_Detection_Unit.stall_o),
-    // .imembubble_i  (1'd0),
 
     .pc_i          (pc),
     .pc_o          (),
     .instruction_i (),
     .instruction_o (inst)
-    // .imembubble_o  ()
 );
 
 // --------- ID stage [begin] --------- //
 Hazard_Detection_Unit Hazard_Detection_Unit(
-    .ID_EX_MemRead_i    (ID_EX.MemRead_o),
-    .IF_ID_RsAddr_i     (IF_ID.RsAddr_o),
-    .IF_ID_RtAddr_i     (IF_ID.RtAddr_o),
-    .ID_EX_RtAddr_i     (ID_EX.RtAddr_o),
+    .ID_EX_MemRead_i    (!ID_EX.MemWrite_o), /*not sure*/
+    .IF_ID_RsAddr_i     (inst[25:21]),
+    .IF_ID_RtAddr_i     (inst[20:16]),
+    .ID_EX_RtAddr_i     (ID_EX.instruction_o[20:16]),
     .PC_Stall_o         (),
     .IF_ID_Stall_o      (),
     .stall_o            ()
@@ -122,8 +119,8 @@ MuxControl mux8
 );
 
 Adder ID_ADD(
-    .data1_in   (Sign_Extend.data_o),
-    .data2_in   (IF_ID.pc_o),
+    .data1_i   (Sign_Extend.data_o),
+    .data2_i   (IF_ID.pc_o),
     .data_o     (mux1.data0_i)
 );
 
@@ -160,8 +157,6 @@ Equal Equal(
 ID_EX ID_EX(
     .clk_i           (clk_i),
     .rst_i           (rst_i),
-    .flush_i         (1'd0),
-    .stall_i         (1'd0),
 
     .pc_i            (IF_ID.pc_o),
     .pc_o            (),
@@ -213,8 +208,8 @@ Mux32 mux4(
     .data_o     ()
 );
 Forwarding_Unit Forwarding_Unit(
-    .ID_EX_RsAddr_i     (ID_EX.RsAddr_o),
-    .ID_EX_RtAddr_i     (ID_EX.RtADdr_o),
+    .ID_EX_RsAddr_i     (ID_EX.instruction_o[25:21]),
+    .ID_EX_RtAddr_i     (ID_EX.instruction_o[20:16]),
     .EX_MEM_RegWrite_i  (EX_MEM.RegWrite_o),
     .EX_MEM_RdAddr_i    (EX_MEM.RdAddr_o),
     .MEM_WB_RegWrite_i  (MEM_WB.RegWrite_o),
@@ -260,7 +255,7 @@ EX_MEM EX_MEM(
     .MemToReg_o     (),
     .RegWrite_o     (),
     .MemWrite_o     (),
-    .ExtOp_o        (),
+    .ExtOp_o        ()
 );
 
 // --------- MEM stage [begin] --------- //
