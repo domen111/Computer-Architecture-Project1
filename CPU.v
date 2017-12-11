@@ -202,7 +202,7 @@ Mux32_3 mux6(
 Mux32_3 mux7(
     .data0_i    (ID_EX.data2_o),
     .data1_i    (mux5.data_o),
-    .data1_i    (EX_MEM.ALU_Res_o),
+    .data2_i    (EX_MEM.ALU_Res_o),
     .select_i   (Forwarding_Unit.EX_RtOverride_o),
     .data_o     ()
 );
