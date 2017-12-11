@@ -5,16 +5,17 @@ module MEM_WB
     input rst_i,
     
     // Pipe in/out
-    input      [31:0] pc_i,
-    output reg [31:0] pc_o,
     input      [31:0] ALU_Res_i,
     output reg [31:0] ALU_Res_o,
     input      [31:0] Read_Data_i,
     output reg [31:0] Read_Data_o,
     input      [31:0] RdAddr_i,
     output reg [31:0] RdAddr_o,
-    input             WB_i,
-    output reg        WB_o
+    input            MemToReg_i,
+    input            RegWrite_i,
+    output reg       MemToReg_o,
+    output reg       RegWrite_o,
+    output reg       MemWrite_o,
 );
 
 always @(posedge clk_i or negedge rst_i) begin
