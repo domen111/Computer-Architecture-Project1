@@ -133,7 +133,7 @@ Registers Registers(
     .clk_i      (clk_i),
     .RSaddr_i   (inst[25:21]),
     .RTaddr_i   (inst[20:16]),
-    .RDaddr_i   (inst[15:11]),
+    .RDaddr_i   (MEM_WB.RdAddr_o),
     .RDdata_i   (mux5.data_o),
     .RegWrite_i (MEM_WB.RegWrite_o),
     .RSdata_o   (),
