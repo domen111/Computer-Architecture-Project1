@@ -218,12 +218,12 @@ Forwarding_Unit Forwarding_Unit(
 ALU_Control ALU_Control(
     .funct_i    (ID_EX.instruction_o[5:0]),
     .ALUOp_i    (ID_EX.ALUOp_o),
-    .ALUCtrl_o  (ALU.ALUCtrl_i)
+    .ALUCtrl_o  ()
 );
 ALU ALU(
     .data1_i    (mux6.data_o),
     .data2_i    (mux4.data_o),
-    .ALUCtrl_i  (),
+    .ALUCtrl_i  (ALU_Control.ALUCtrl_o),
     .data_o     (),
     .Zero_o     ()
 );
