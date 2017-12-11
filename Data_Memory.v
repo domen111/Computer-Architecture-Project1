@@ -9,14 +9,14 @@ module Data_Memory
 );
 
 // Memories
-reg [31:0] mem [0:255];
+reg [31:0] memory [0:255];
 
 always @(posedge clk_i) begin
 	if( memWrite_i ) begin
-        mem[addr_i] <= Write_Data_i;
+        memory[addr_i] <= Write_Data_i;
 	end
 end
 
-assign Read_Data_o = memRead_i ? mem[addr_i][31:0]: Write_Data_i;
+assign Read_Data_o = memRead_i ? memory[addr_i][31:0]: Write_Data_i;
 
 endmodule
