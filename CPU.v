@@ -238,9 +238,10 @@ Mux5 mux8(
     .data0_i    (ID_EX.instruction_o[20:16]),
     .data1_i    (ID_EX.instruction_o[15:11]),
     .select_i   (ID_EX.RegDst_o),
-    .data_o     (/*todo*/)
+    .data_o     ()
 );
 // --------- [end] EX stage --------- //
+
 EX_MEM EX_MEM(
     .clk_i          (clk_i),
     .rst_i          (rst_i),
