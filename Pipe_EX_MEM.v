@@ -5,14 +5,12 @@ module EX_MEM
     input rst_i,
     
     // Pipe in/out
-    input      [31:0] pc_i,
-    output reg [31:0] pc_o,
     input      [31:0] ALU_Res_i,
     output reg [31:0] ALU_Res_o,
     input             Write_Data_i,
     output reg        Write_Data_o,
-    input      [3:0]  Forward_Data_i,
-    output reg [3:0]  Forward_Data_o,
+    input      [31:0] RdAddr_i,
+    output reg [31:0] RdAddr_o,
 
     // Control Outputs
     input            MemToReg_i,

@@ -11,8 +11,8 @@ module MEM_WB
     output reg [31:0] ALU_Res_o,
     input      [31:0] Read_Data_i,
     output reg [31:0] Read_Data_o,
-    input      [3:0]  Forward_Data_i,
-    output reg [3:0]  Forward_Data_o,
+    input      [31:0] RdAddr_i,
+    output reg [31:0] RdAddr_o,
     input             WB_i,
     output reg        WB_o
 );
