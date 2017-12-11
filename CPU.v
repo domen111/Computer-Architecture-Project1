@@ -29,7 +29,7 @@ Mux32 mux1(
 
 Branch_And Branch_And(
     .Branch_i   (Control.Branch_o),
-    .Equal_i    (Equal.Eqaul_o),
+    .Equal_i    (Equal.Equal_o),
     .Branch_o   (mux1.select_i)
 );
 
@@ -43,7 +43,7 @@ Mux32 mux2(
 Adder Add_PC(
     .data1_in   (pc),
     .data2_in   (32'd4),
-    .data_o     (PC.pc_i)
+    .data_o     ()
 );
 
 PC PC(
@@ -63,13 +63,13 @@ Instruction_Memory Instruction_Memory(
 IF_ID IF_ID(
     .clk_i         (clk_i),
     .rst_i         (rst_i),
-    .flush_i       (IF_ID_Flush.Flush_o),
+    .flush_i       (),
     .stall_i       (Hazard_Detection_Unit.stall_o),
     // .imembubble_i  (1'd0),
 
     .pc_i          (pc),
     .pc_o          (),
-    .instruction_i (Instruction_Memory.instr_o),
+    .instruction_i (),
     .instruction_o (inst)
     // .imembubble_o  ()
 );
@@ -165,9 +165,9 @@ ID_EX ID_EX(
 
     .pc_i            (IF_ID.pc_o),
     .pc_o            (),
-    .data1_i         (Registers.data1_o),
+    .data1_i         (Registers.RSdata_o),
     .data1_o         (mux6.data0_i),
-    .data2_i         (Registers.data2_o),
+    .data2_i         (Registers.RTdata_o),
     .data2_o         (mux7.data0_i),
     .sign_extended_i (Sign_Extend.data_o),
     .sign_extended_o (),
@@ -230,11 +230,11 @@ ALU_Control ALU_Control(
 ALU ALU(
     .data1_i    (mux6.data_o),
     .data2_i    (mux4.data_o),
-    .ALUCtrl_i  (ALU_Control.ALUCtrl_o),
+    .ALUCtrl_i  (),
     .data_o     (),
     .Zero_o     ()
 );
-Mux32 mux8(
+Mux5 mux8(
     .data0_i    (ID_EX.instruction_o[20:16]),
     .data1_i    (ID_EX.instruction_o[15:11]),
     .select_i   (ID_EX.RegDst_o),
