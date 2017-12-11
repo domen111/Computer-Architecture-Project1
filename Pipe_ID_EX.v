@@ -17,12 +17,22 @@ module ID_EX
     output reg [31:0] sign_extended_o,
     input      [31:0] instruction_i,
     output reg [31:0] instruction_o,
-    input             WB_i,
-    output reg        WB_o,
-    input             M_i,
-    output reg        M_o,
-    input             EX_i,
-    output reg        EX_o
+
+    // Control Outputs
+    input            RegDst_i,
+    input            ALUSrc_i,
+    input            MemToReg_i,
+    input            RegWrite_i,
+    input            MemWrite_i,
+    input            ExtOp_i,
+    input      [1:0] ALUOp_i,
+    output reg       RegDst_o,
+    output reg       ALUSrc_o,
+    output reg       MemToReg_o,
+    output reg       RegWrite_o,
+    output reg       MemWrite_o,
+    output reg       ExtOp_o,
+    output reg [1:0] ALUOp_o
 );
 
 always @(posedge clk_i or negedge rst_i) begin
