@@ -3,8 +3,6 @@ module EX_MEM
     // Inputs
     input clk_i,
     input rst_i,
-    input flush_i,
-    input stall_i,
     
     // Pipe in/out
     input      [31:0] pc_i,
@@ -15,10 +13,16 @@ module EX_MEM
     output reg        Write_Data_o,
     input      [3:0]  Forward_Data_i,
     output reg [3:0]  Forward_Data_o,
-    input             WB_i,
-    output reg        WB_o,
-    input             M_i,
-    output reg        M_o
+
+    // Control Outputs
+    input            MemToReg_i,
+    input            RegWrite_i,
+    input            MemWrite_i,
+    input            ExtOp_i,
+    output reg       MemToReg_o,
+    output reg       RegWrite_o,
+    output reg       MemWrite_o,
+    output reg       ExtOp_o,
 );
 
 always @(posedge clk_i or negedge rst_i) begin
@@ -26,19 +30,12 @@ always @(posedge clk_i or negedge rst_i) begin
         pc_o <= 0;
     end
     else begin
-        if( !stall_i ) begin
-            if( flush_i ) begin
-                pc_o <= 0;
-            end
-            else begin
-                pc_o <= pc_i;
-                ALU_Res_o <= ALU_Res_i;
-                Write_Data_o <= Write_Data_i;
-                Forward_Data_o <= Forward_Data_i;
-                WB_o <= WB_i;
-                M_o <= M_i;
-            end
-        end
+        pc_o <= pc_i;
+        ALU_Res_o <= ALU_Res_i;
+        Write_Data_o <= Write_Data_i;
+        Forward_Data_o <= Forward_Data_i;
+        WB_o <= WB_i;
+        M_o <= M_i;
     end
 end
 

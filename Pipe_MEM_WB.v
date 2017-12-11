@@ -3,8 +3,6 @@ module MEM_WB
     // Inputs
     input clk_i,
     input rst_i,
-    input flush_i,
-    input stall_i,
     
     // Pipe in/out
     input      [31:0] pc_i,
@@ -24,18 +22,11 @@ always @(posedge clk_i or negedge rst_i) begin
         pc_o <= 0;
     end
     else begin
-        if( !stall_i ) begin
-            if( flush_i ) begin
-                pc_o <= 0;
-            end
-            else begin
-                pc_o <= pc_i;
-                ALU_Res_o <= ALU_Res_i;
-                Read_Data_o <= Read_Data_i;
-                Forward_Data_o <= Forward_Data_i;
-                WB_o <= WB_i;
-            end
-        end
+        pc_o <= pc_i;
+        ALU_Res_o <= ALU_Res_i;
+        Read_Data_o <= Read_Data_i;
+        Forward_Data_o <= Forward_Data_i;
+        WB_o <= WB_i;
     end
 end
 
