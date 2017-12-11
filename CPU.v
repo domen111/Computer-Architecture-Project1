@@ -21,8 +21,8 @@ IF_ID_Flush IF_ID_Flush(
 );
 
 Mux32 mux1(
-    .data0_i    (ADD.data_o),
-    .data1_i    (Add_PC.data_o),
+    .data0_i    (Add_PC.data_o),
+    .data1_i    (ADD.data_o),
     .select_i   (Branch_And.Branch_o),
     .data_o     ()
 );
@@ -123,7 +123,7 @@ MuxControl mux8
     .ALUOp_o    ()
 );
 
-Adder ID_ADD(
+Adder ADD(
     .data1_i   (Sign_Extend.data_o << 2),
     .data2_i   (IF_ID.pc_o),
     .data_o     ()
