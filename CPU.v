@@ -65,7 +65,7 @@ IF_ID IF_ID(
     .rst_i         (rst_i),
     .flush_i       (),
 
-    .pc_i          (pc),
+    .pc_i          (Add_PC.data_o),
     .pc_o          (),
     .instruction_i (),
     .instruction_o (inst)
