@@ -37,7 +37,7 @@ Mux32 mux2(
     .data0_i    (mux1.data_o),
     .data1_i    (),
     .select_i   (Control.Jump_o),
-    .data_o     (PC.pc_i)
+    .data_o     ()
 );
 
 Adder Add_PC(
@@ -75,7 +75,7 @@ IF_ID IF_ID(
 );
 
 // --------- ID stage [begin] --------- //
-Hazard_Detection_Unit(
+Hazard_Detection_Unit Hazard_Detection_Unit(
     .ID_EX_MemRead_i    (),
     .IF_ID_RsAddr_i     (),
     .IF_ID_RtAddr_i     (),
@@ -118,7 +118,7 @@ MuxControl MuxControl
     .Branch_o   (),
     .Jump_o     (),
     .ExtOp_o    (),
-    .ALUOp_o    (),
+    .ALUOp_o    ()
 );
 
 Adder ID_ADD(
@@ -138,7 +138,7 @@ Registers Registers(
     .RTdata_o   ()
 );
 
-MUX5 MUX_RegDst(
+Mux5 MUX_RegDst(
     .data0_i    (inst[20:16]),
     .data1_i    (inst[15:11]),
     .select_i   (Control.RegDst_o),
@@ -150,7 +150,7 @@ Sign_Extend Sign_Extend(
     .data_o     ()
 );
 
-Equal(
+Equal Equal(
     .RSData_i   (),
     .RTData_i   (),
     .Equal_o    (Branch_And.Equal_i)
@@ -173,12 +173,22 @@ ID_EX ID_EX(
     .sign_extended_o (),
     .instruction_i   (inst),
     .instruction_o   (),
-    .WB_i            (),
-    .WB_o            (),
-    .M_i             (),
-    .M_o             (),
-    .EX_i            (),
-    .EX_o            ()
+
+    // Control Outputs
+    .RegDst_i        (Control.RegDst_o),
+    .ALUSrc_i        (Control.ALUSrc_o),
+    .MemToReg_i      (Control.MemToReg_o),
+    .RegWrite_i      (Control.RegWrite_o),
+    .MemWrite_i      (Control.MemWrite_o),
+    .ExtOp_i         (Control.ExtOp_o),
+    .ALUOp_i         (Control.ALUOp_o),
+    .RegDst_o        (),
+    .ALUSrc_o        (),
+    .MemToReg_o      (),
+    .RegWrite_o      (),
+    .MemWrite_o      (),
+    .ExtOp_o         (),
+    .ALUOp_o         ()
 );
 
 // --------- EX stage [begin] --------- //

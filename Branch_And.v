@@ -1,4 +1,4 @@
-module Branch_And.v
+module Branch_And
 (
     input Branch_i,
     input Equal_i,
