@@ -273,6 +273,7 @@ Data_Memory Data_Memory(
     .Read_Data_o ()
 );
 // --------- [end] MEM stage --------- //
+
 MEM_WB MEM_WB(
     // Inputs
     .clk_i      (clk_i),
@@ -290,6 +291,7 @@ MEM_WB MEM_WB(
     .MemToReg_o (),
     .RegWrite_o ()
 );
+
 // --------- WB stage [begin] ------- //
 Mux32 mux5(
     .data0_i    (MEM_WB.ALU_Res_o),
