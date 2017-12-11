@@ -17,11 +17,11 @@ wire  [31:0] inst;
 IF_ID_Flush IF_ID_Flush(
     .Jump_i     (Control.Jump_o),
     .Branch_i   (Branch_And.Branch_o),
-    .Flush_o    (IF_ID.flush_i)
+    .Flush_o    ()
 );
 
 Mux32 mux1(
-    .data0_i    (ID_ADD.data_o),
+    .data0_i    (ADD.data_o),
     .data1_i    (Add_PC.data_o),
     .select_i   (Branch_And.Branch_o),
     .data_o     ()
@@ -30,7 +30,7 @@ Mux32 mux1(
 Branch_And Branch_And(
     .Branch_i   (Control.Branch_o),
     .Equal_i    (Equal.Equal_o),
-    .Branch_o   (mux1.select_i)
+    .Branch_o   ()
 );
 
 Mux32 mux2(
@@ -56,18 +56,18 @@ PC PC(
 
 Instruction_Memory Instruction_Memory(
     .addr_i     (pc),
-    .instr_o    (IF_ID.instruction_i)
+    .instr_o    ()
 );
 // --------- [end] IF stage --------- //
 
 IF_ID IF_ID(
     .clk_i         (clk_i),
     .rst_i         (rst_i),
-    .flush_i       (),
+    .flush_i       (IF_ID_Flush.Flush_o),
 
     .pc_i          (Add_PC.data_o),
     .pc_o          (),
-    .instruction_i (),
+    .instruction_i (Instruction_Memory.instr_o),
     .instruction_o (inst)
 );
 
@@ -118,10 +118,10 @@ MuxControl mux8
     .ALUOp_o    ()
 );
 
-Adder ID_ADD(
-    .data1_i   (Sign_Extend.data_o),
+Adder ADD(
+    .data1_i   (Sign_Extend.data_o), // Need to modify
     .data2_i   (IF_ID.pc_o),
-    .data_o     (mux1.data0_i)
+    .data_o     ()
 );
 
 Registers Registers(
