@@ -19,8 +19,8 @@ always @(*)
 begin
     
     // default
-    EX_RsOverride_o_temp = 2'b00;
-    EX_RtOverride_o_temp = 2'b00;
+    EX_RsOverride_o_temp <= 2'b00;
+    EX_RtOverride_o_temp <= 2'b00;
     
     if(EX_MEM_RegWrite_i && (EX_MEM_RdAddr_i != `ZeroReg))
     begin
@@ -30,13 +30,13 @@ begin
             EX_RtOverride_o_temp <= 2'b10;
     end
 
-    if(MEM_WB_RegWrite_i && (EX_MEM_RdAddr_i != `ZeroReg))
+    if(MEM_WB_RegWrite_i && (MEM_WB_RdAddr_i != `ZeroReg))
     begin
-        if(EX_MEM_RdAddr_i != ID_EX_RsAddr_i &&
-          (MEM_WB_RdAddr_i == ID_EX_RsAddr_i))
+        if( ( (EX_MEM_RdAddr_i != ID_EX_RsAddr_i) || (~EX_MEM_RegWrite_i) ) &&
+              (MEM_WB_RdAddr_i == ID_EX_RsAddr_i) )
             EX_RsOverride_o_temp <= 2'b01;
-        if(EX_MEM_RdAddr_i != ID_EX_RtAddr_i &&
-          (MEM_WB_RdAddr_i == ID_EX_RtAddr_i))
+        if( ( (EX_MEM_RdAddr_i != ID_EX_RtAddr_i) || (~EX_MEM_RegWrite_i) ) &&
+              (MEM_WB_RdAddr_i == ID_EX_RtAddr_i) )
             EX_RtOverride_o_temp <= 2'b01;
     end
 end
