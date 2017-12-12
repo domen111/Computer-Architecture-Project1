@@ -20,6 +20,7 @@ module MEM_WB
 always @(posedge clk_i or negedge rst_i) begin
     ALU_Res_o <= ALU_Res_i;
     Read_Data_o <= Read_Data_i;
+    RdAddr_o <= RdAddr_i;
     MemToReg_o <= MemToReg_i;
     RegWrite_o <= RegWrite_i;
 end
