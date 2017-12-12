@@ -33,7 +33,7 @@ output       ExtOp_o;
 output [1:0] ALUOp_o;
 
 assign RegDst_o   = (Op_i == `Rtype);
-assign ALUSrc_o   = (Op_i == `addi);
+assign ALUSrc_o   = (Op_i == `addi || Op_i == `lw || Op_i == `sw);
 assign MemToReg_o = (Op_i == `lw);
 assign RegWrite_o = (Op_i == `Rtype || Op_i == `addi || Op_i == `lw);
 assign MemWrite_o = (Op_i == `sw);
