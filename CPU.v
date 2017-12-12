@@ -50,6 +50,7 @@ PC PC(
     .clk_i      (clk_i),
     .rst_i      (rst_i),
     .start_i    (start_i),
+    .stall_i    (Hazard_Detection_Unit.stall_o),
     .pc_i       (mux2.data_o),
     .pc_o       (pc)
 );
@@ -64,6 +65,7 @@ IF_ID IF_ID(
     .clk_i         (clk_i),
     .rst_i         (rst_i),
     .flush_i       (IF_ID_Flush.Flush_o),
+    .stall_i       (Hazard_Detection_Unit.stall_o),
 
     .pc_i          (Add_PC.data_o),
     .pc_o          (),
@@ -73,12 +75,12 @@ IF_ID IF_ID(
 
 // --------- ID stage [begin] --------- //
 Hazard_Detection_Unit Hazard_Detection_Unit(
-    .ID_EX_MemRead_i    (!ID_EX.MemWrite_o), /*not sure*/
+    .ID_EX_MemRead_i    (ID_EX.MemRead_o),
     .IF_ID_RsAddr_i     (inst[25:21]),
     .IF_ID_RtAddr_i     (inst[20:16]),
     .ID_EX_RtAddr_i     (ID_EX.instruction_o[20:16]),
-    .PC_Stall_o         (),
-    .IF_ID_Stall_o      (),
+    // .PC_Stall_o         (),
+    // .IF_ID_Stall_o      (),
     .stall_o            ()
 );
 
@@ -94,6 +96,7 @@ Control Control(
     .MemToReg_o (),
     .RegWrite_o (),
     .MemWrite_o (),
+    .MemRead_o (),
     .Branch_o   (),
     .Jump_o     (),
     .ExtOp_o    (),
@@ -108,6 +111,7 @@ MuxControl mux8
     .MemToReg_i (Control.MemToReg_o),
     .RegWrite_i (Control.RegWrite_o),
     .MemWrite_i (Control.MemWrite_o),
+    .MemRead_i  (Control.MemRead_o),
     .Branch_i   (Control.Branch_o),
     .Jump_i     (Control.Jump_o),
     .ExtOp_i    (Control.ExtOp_o),
@@ -117,6 +121,7 @@ MuxControl mux8
     .MemToReg_o (),
     .RegWrite_o (),
     .MemWrite_o (),
+    .MemRead_o  (),
     .Branch_o   (),
     .Jump_o     (),
     .ExtOp_o    (),
@@ -173,6 +178,7 @@ ID_EX ID_EX(
     .MemToReg_i      (mux8.MemToReg_o),
     .RegWrite_i      (mux8.RegWrite_o),
     .MemWrite_i      (mux8.MemWrite_o),
+    .MemRead_i       (mux8.MemRead_i),
     .ExtOp_i         (mux8.ExtOp_o),
     .ALUOp_i         (mux8.ALUOp_o),
     .RegDst_o        (),
@@ -180,6 +186,7 @@ ID_EX ID_EX(
     .MemToReg_o      (),
     .RegWrite_o      (),
     .MemWrite_o      (),
+    .MemRead_o       (),
     .ExtOp_o         (),
     .ALUOp_o         ()
 );
@@ -249,10 +256,12 @@ EX_MEM EX_MEM(
     .MemToReg_i     (ID_EX.MemToReg_o),
     .RegWrite_i     (ID_EX.RegWrite_o),
     .MemWrite_i     (ID_EX.MemWrite_o),
+    .MemRead_i      (ID_EX.MemRead_o),
     .ExtOp_i        (ID_EX.ExtOp_o),
     .MemToReg_o     (),
     .RegWrite_o     (),
     .MemWrite_o     (),
+    .MemRead_o      (),
     .ExtOp_o        ()
 );
 
@@ -260,7 +269,7 @@ EX_MEM EX_MEM(
 Data_Memory Data_Memory(
     .clk_i       (clk_i),
     .addr_i      (EX_MEM.ALU_Res_o),
-    .memRead_i   (!EX_MEM.MemWrite_o), // weird
+    .memRead_i   (EX_MEM.MemWrite_o),
     .memWrite_i  (EX_MEM.MemWrite_o),
     .Write_Data_i(EX_MEM.Write_Data_o),
     .Read_Data_o ()

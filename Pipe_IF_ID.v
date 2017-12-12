@@ -4,6 +4,7 @@ module IF_ID
     input clk_i,
     input rst_i,
     input flush_i,
+    input stall_i,
     
     // Pipe in/out
     input [31:0] pc_i,
@@ -21,16 +22,18 @@ always @(posedge clk_i or negedge rst_i) begin
         pc_o <= 0;
     end
     else begin
-        if( flush_i ) begin
-            // Pass through all 0s
-            instruction_o <= 0;
-            pc_o <= 0;
-        end
-        else begin
-            // Pass through signals
-            instruction_o <= instruction_i;
-            pc_o <= pc_i;
-            // imembubble_o <= imembubble_i;
+        if( !stall_i ) begin
+            if( flush_i ) begin
+                // Pass through all 0s
+                instruction_o <= 0;
+                pc_o <= 0;
+            end
+            else begin
+                // Pass through signals
+                instruction_o <= instruction_i;
+                pc_o <= pc_i;
+                // imembubble_o <= imembubble_i;
+            end
         end
     end
 end

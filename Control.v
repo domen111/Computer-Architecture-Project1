@@ -13,6 +13,7 @@ module Control
     MemToReg_o,
     RegWrite_o,
     MemWrite_o,
+    MemRead_o,
     Branch_o,
     Jump_o,
     ExtOp_o,
@@ -25,6 +26,7 @@ output       ALUSrc_o;
 output       MemToReg_o;
 output       RegWrite_o;
 output       MemWrite_o;
+output       MemRead_o;
 output       Branch_o;
 output       Jump_o;
 output       ExtOp_o;
@@ -35,6 +37,7 @@ assign ALUSrc_o   = (Op_i == `addi);
 assign MemToReg_o = (Op_i == `lw);
 assign RegWrite_o = (Op_i == `Rtype || Op_i == `addi || Op_i == `lw);
 assign MemWrite_o = (Op_i == `sw);
+assign MemRead_o  = (Op_i == `lw);
 assign Branch_o   = (Op_i == `beq);
 assign Jump_o     = (Op_i == `jump);
 assign ALUOp_o    = (Op_i == `Rtype) ? 2'b11 :
