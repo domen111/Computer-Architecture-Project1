@@ -269,7 +269,7 @@ EX_MEM EX_MEM(
 Data_Memory Data_Memory(
     .clk_i       (clk_i),
     .addr_i      (EX_MEM.ALU_Res_o),
-    .memRead_i   (EX_MEM.MemWrite_o),
+    .memRead_i   (EX_MEM.MemRead_o),
     .memWrite_i  (EX_MEM.MemWrite_o),
     .Write_Data_i(EX_MEM.Write_Data_o),
     .Read_Data_o ()

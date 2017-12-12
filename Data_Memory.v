@@ -1,7 +1,7 @@
 module Data_Memory
 (
     input wire          clk_i,
-    input wire	[31:0]   addr_i,
+    input wire	[31:0]  addr_i,
     input wire          memRead_i,
     input wire          memWrite_i,
     input wire 	[31:0]  Write_Data_i,
