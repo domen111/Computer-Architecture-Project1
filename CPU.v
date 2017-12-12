@@ -302,5 +302,11 @@ Mux32 mux5(
     .data_o     ()
 );
 // --------- [end] WB stage --------- //
+
+// always @(*) begin
+//     $display("Forwarding_Unit.EX_RtOverride_o: %d, ID_EX.instruction_o: %d, EX_MEM.RegWrite_o: %d, EX_MEM.RdAddr_o:%d, MEM_WB.RegWrite_o: %d, MEM_WB.RdAddr_o:%d, ALU.data1_i:%d, ALU.data2_i:%d, mux4.data1_i:%d, rst_i: %d, ALU.data_o: %d",
+//               Forwarding_Unit.EX_RtOverride_o,     ID_EX.instruction_o,     EX_MEM.RegWrite_o,     EX_MEM.RdAddr_o   , MEM_WB.RegWrite_o    , MEM_WB.RdAddr_o   , ALU.data1_i   , ALU.data2_i   , mux4.data1_i   , rst_i    , ALU.data_o);
+// end
+
 endmodule
 
