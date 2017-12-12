@@ -7,15 +7,11 @@ module Hazard_Detection_Unit
     // output reg PC_Stall_o,
     // output reg IF_ID_Stall_o,
     // output reg stall_o
-    output PC_Stall_o,
-    output IF_ID_Stall_o,
     output stall_o
 );
 
 
-assign {PC_Stall_o, IF_ID_Stall_o, stall_o} =
-        (ID_EX_MemRead_i && ((ID_EX_RtAddr_i == IF_ID_RsAddr_i) || (ID_EX_RtAddr_i == IF_ID_RtAddr_i)) )
-        ? {1'b1, 1'b1, 1'b1} : {1'b0, 1'b0, 1'b0};
+assign stall_o = (ID_EX_MemRead_i && ((ID_EX_RtAddr_i == IF_ID_RsAddr_i) || (ID_EX_RtAddr_i == IF_ID_RtAddr_i)) ) ? 1'b1 : 1'b0;
 
 // initial begin
 //     stall_o = 1'b0;
