@@ -3,7 +3,8 @@ module MEM_WB
     // Inputs
     input clk_i,
     input rst_i,
-    
+    input memStall_i,
+        
     // Pipe in/out
     input      [31:0] ALU_Res_i,
     output reg [31:0] ALU_Res_o,

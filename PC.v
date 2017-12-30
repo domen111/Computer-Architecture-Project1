@@ -4,6 +4,7 @@ module PC
     rst_i,
     start_i,
     stall_i,
+    memStall_i,
     pc_i,
     pc_o
 );

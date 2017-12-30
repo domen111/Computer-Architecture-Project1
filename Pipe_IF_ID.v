@@ -5,7 +5,8 @@ module IF_ID
     input rst_i,
     input flush_i,
     input stall_i,
-    
+    input memStall_i, 
+       
     // Pipe in/out
     input [31:0] pc_i,
     output reg [31:0] pc_o,

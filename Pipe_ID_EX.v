@@ -3,7 +3,8 @@ module ID_EX
     // Inputs
     input clk_i,
     input rst_i,
-    
+    input memStall_i,
+        
     // Pipe in/out
     input      [31:0] pc_i,
     output reg [31:0] pc_o,

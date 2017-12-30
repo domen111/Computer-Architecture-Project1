@@ -51,6 +51,7 @@ PC PC(
     .rst_i      (rst_i),
     .start_i    (start_i),
     .stall_i    (Hazard_Detection_Unit.stall_o),
+    .memStall_i (dcache_top.p1_stall_o),
     .pc_i       (mux2.data_o),
     .pc_o       (pc)
 );
@@ -62,15 +63,15 @@ Instruction_Memory Instruction_Memory(
 // --------- [end] IF stage --------- //
 
 IF_ID IF_ID(
-    .clk_i         (clk_i),
-    .rst_i         (rst_i),
-    .flush_i       (IF_ID_Flush.Flush_o),
-    .stall_i       (Hazard_Detection_Unit.stall_o),
-
-    .pc_i          (Add_PC.data_o),
-    .pc_o          (),
-    .instruction_i (Instruction_Memory.instr_o),
-    .instruction_o (inst)
+    .clk_i          (clk_i),
+    .rst_i          (rst_i),
+    .flush_i        (IF_ID_Flush.Flush_o),
+    .stall_i        (Hazard_Detection_Unit.stall_o),
+    .memStall_i     (dcache_top.p1_stall_o),
+    .pc_i           (Add_PC.data_o),
+    .pc_o           (),
+    .instruction_i  (Instruction_Memory.instr_o),
+    .instruction_o  (inst)
 );
 
 // --------- ID stage [begin] --------- //
@@ -79,8 +80,6 @@ Hazard_Detection_Unit Hazard_Detection_Unit(
     .IF_ID_RsAddr_i     (inst[25:21]),
     .IF_ID_RtAddr_i     (inst[20:16]),
     .ID_EX_RtAddr_i     (ID_EX.instruction_o[20:16]),
-    // .PC_Stall_o         (),
-    // .IF_ID_Stall_o      (),
     .stall_o            ()
 );
 
@@ -158,19 +157,20 @@ Equal Equal(
 // --------- [end] ID stage --------- //
 
 ID_EX ID_EX(
-    .clk_i           (clk_i),
-    .rst_i           (rst_i),
-
-    .pc_i            (IF_ID.pc_o),
-    .pc_o            (),
-    .data1_i         (Registers.RSdata_o),
-    .data1_o         (),
-    .data2_i         (Registers.RTdata_o),
-    .data2_o         (),
-    .sign_extended_i (Sign_Extend.data_o),
-    .sign_extended_o (),
-    .instruction_i   (inst),
-    .instruction_o   (),
+    .clk_i              (clk_i),
+    .rst_i              (rst_i),
+    .memStall_i         (dcache_top.p1_stall_o),
+    
+    .pc_i               (IF_ID.pc_o),
+    .pc_o               (),
+    .data1_i            (Registers.RSdata_o),
+    .data1_o            (),
+    .data2_i            (Registers.RTdata_o),
+    .data2_o            (),
+    .sign_extended_i    (Sign_Extend.data_o),
+    .sign_extended_o    (),
+    .instruction_i      (inst),
+    .instruction_o      (),
 
     // Control Outputs
     .RegDst_i        (mux8.RegDst_o),
@@ -245,6 +245,7 @@ Mux5 mux3(
 EX_MEM EX_MEM(
     .clk_i          (clk_i),
     .rst_i          (rst_i),
+    .memStall_i     (dcache_top.p1_stall_o),    
     
     .ALU_Res_i      (ALU.data_o),
     .ALU_Res_o      (),
@@ -304,6 +305,7 @@ MEM_WB MEM_WB(
     // Inputs
     .clk_i      (clk_i),
     .rst_i      (rst_i),
+    .memStall_o (dcache_top.p1_stall_o),    
     
     // Pipe in/out
     .ALU_Res_i  (EX_MEM.ALU_Res_o),
