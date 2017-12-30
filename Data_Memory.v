@@ -1,13 +1,13 @@
 module Data_Memory
 (
-    input           clk_i;
-    input           rst_i;
-    input   [31:0]  addr_i;
-    input   [255:0] data_i;
-    input           enable_i;
-    input           write_i;
-    output          ack_o;
-    output  [255:0] data_o;
+    input           clk_i,
+    input           rst_i,
+    input   [31:0]  addr_i,
+    input   [255:0] data_i,
+    input           enable_i,
+    input           write_i,
+    output          ack_o,
+    output  [255:0] data_o
 );
 
 // Memory

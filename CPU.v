@@ -267,12 +267,36 @@ EX_MEM EX_MEM(
 
 // --------- MEM stage [begin] --------- //
 Data_Memory Data_Memory(
-    .clk_i       (clk_i),
-    .addr_i      (EX_MEM.ALU_Res_o),
-    .memRead_i   (EX_MEM.MemRead_o),
-    .memWrite_i  (EX_MEM.MemWrite_o),
-    .Write_Data_i(EX_MEM.Write_Data_o),
-    .Read_Data_o ()
+    .clk_i          (clk_i),
+    .rst_i          (rst_i),
+    .addr_i         (dcache_top.mem_addr_o),
+    .data_i         (dcache_top.mem_data_o),
+    .enable_i       (dcache_top.mem_enable_o),
+    .write_i        (dcache_top.mem_write_o),
+    .ack_o          (),
+    .data_o         (),
+    .addr_i         (EX_MEM.ALU_Res_o),
+    .memRead_i      (EX_MEM.MemRead_o),
+    .memWrite_i     (EX_MEM.MemWrite_o),
+    .Write_Data_i   (EX_MEM.Write_Data_o),
+    .Read_Data_o    ()
+);
+
+dcache_top dcache_top(
+    .clk_i          (clk_i),
+    .rst_i          (rst_i),
+    .mem_data_i     (Data_Memory.data_o),
+    .mem_ack_i      (Data_Memory.ack_o),
+    .mem_data_o     (),
+    .mem_addr_o     (),
+    .mem_enable_o   (),
+    .mem_write_o    (),
+    .p1_data_i      (EX_MEM.Write_Data_o),
+    .p1_addr_i      (EX_MEM.ALU_Res_o),
+    .p1_MemRead_i   (EX_MEM.MemRead_o),
+    .p1_MemWrite_i  (EX_MEM.MemWrite_o),
+    .p1_data_o      (),
+    .p1_stall_o     ()
 );
 // --------- [end] MEM stage --------- //
 
