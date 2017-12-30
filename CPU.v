@@ -275,12 +275,7 @@ Data_Memory Data_Memory(
     .enable_i       (dcache_top.mem_enable_o),
     .write_i        (dcache_top.mem_write_o),
     .ack_o          (),
-    .data_o         (),
-    .addr_i         (EX_MEM.ALU_Res_o),
-    .memRead_i      (EX_MEM.MemRead_o),
-    .memWrite_i     (EX_MEM.MemWrite_o),
-    .Write_Data_i   (EX_MEM.Write_Data_o),
-    .Read_Data_o    ()
+    .data_o         ()
 );
 
 dcache_top dcache_top(
@@ -305,12 +300,12 @@ MEM_WB MEM_WB(
     // Inputs
     .clk_i      (clk_i),
     .rst_i      (rst_i),
-    .memStall_o (dcache_top.p1_stall_o),    
+    .memStall_i (dcache_top.p1_stall_o),    
     
     // Pipe in/out
     .ALU_Res_i  (EX_MEM.ALU_Res_o),
     .ALU_Res_o  (),
-    .Read_Data_i(Data_Memory.Read_Data_o),
+    .Read_Data_i(Data_Memory.data_o),
     .Read_Data_o(),
     .RdAddr_i   (EX_MEM.RdAddr_o),
     .RdAddr_o   (),
