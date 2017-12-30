@@ -282,22 +282,11 @@ EX_MEM EX_MEM(
 );
 
 // --------- MEM stage [begin] --------- //
-Data_Memory Data_Memory(
-    .clk_i          (clk_i),
-    .rst_i          (rst_i),
-    .addr_i         (dcache.mem_addr_o),
-    .data_i         (dcache.mem_data_o),
-    .enable_i       (dcache.mem_enable_o),
-    .write_i        (dcache.mem_write_o),
-    .ack_o          (),
-    .data_o         ()
-);
-
 dcache_top dcache(
     .clk_i          (clk_i),
     .rst_i          (rst_i),
-    .mem_data_i     (Data_Memory.data_o),
-    .mem_ack_i      (Data_Memory.ack_o),
+    .mem_data_i     (mem_data_i),
+    .mem_ack_i      (mem_ack_i),
     .mem_data_o     (),
     .mem_addr_o     (),
     .mem_enable_o   (),
