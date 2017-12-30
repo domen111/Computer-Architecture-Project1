@@ -98,7 +98,7 @@ assign r_hit_data = sram_cache_data;
 always@(p1_offset or r_hit_data) begin
     //!!! add you code here! (p1_data=...?)
     if(hit) begin
-        // p1_data <= r_hit_data; // todo
+        p1_data <= r_hit_data[p1_offset*8 +: 8];
     end
 end
 
