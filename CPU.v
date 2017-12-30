@@ -305,7 +305,7 @@ MEM_WB MEM_WB(
     // Pipe in/out
     .ALU_Res_i  (EX_MEM.ALU_Res_o),
     .ALU_Res_o  (),
-    .Read_Data_i(Data_Memory.data_o),
+    .Read_Data_i(dcache_top.p1_data_o),
     .Read_Data_o(),
     .RdAddr_i   (EX_MEM.RdAddr_o),
     .RdAddr_o   (),
