@@ -1,14 +1,29 @@
 module CPU
 (
-    clk_i, 
+    clk_i,
     rst_i,
-    start_i
+    start_i,
+
+    mem_data_i,
+    mem_ack_i,
+    mem_data_o,
+    mem_addr_o,
+    mem_enable_o,
+    mem_write_o
 );
 
 // Ports
 input        clk_i;
 input        rst_i;
 input        start_i;
+
+// to Data Memory interface
+input   [256-1:0]   mem_data_i;
+input               mem_ack_i;
+output  [256-1:0]   mem_data_o;
+output  [32-1:0]    mem_addr_o;
+output              mem_enable_o;
+output              mem_write_o;
 
 wire  [31:0] pc;
 wire  [31:0] inst;
@@ -51,7 +66,7 @@ PC PC(
     .rst_i      (rst_i),
     .start_i    (start_i),
     .stall_i    (Hazard_Detection_Unit.stall_o),
-    .memStall_i (dcache_top.p1_stall_o),
+    .memStall_i (dcache.p1_stall_o),
     .pc_i       (mux2.data_o),
     .pc_o       (pc)
 );
@@ -67,7 +82,7 @@ IF_ID IF_ID(
     .rst_i          (rst_i),
     .flush_i        (IF_ID_Flush.Flush_o),
     .stall_i        (Hazard_Detection_Unit.stall_o),
-    .memStall_i     (dcache_top.p1_stall_o),
+    .memStall_i     (dcache.p1_stall_o),
     .pc_i           (Add_PC.data_o),
     .pc_o           (),
     .instruction_i  (Instruction_Memory.instr_o),
@@ -159,8 +174,8 @@ Equal Equal(
 ID_EX ID_EX(
     .clk_i              (clk_i),
     .rst_i              (rst_i),
-    .memStall_i         (dcache_top.p1_stall_o),
-    
+    .memStall_i         (dcache.p1_stall_o),
+
     .pc_i               (IF_ID.pc_o),
     .pc_o               (),
     .data1_i            (Registers.RSdata_o),
@@ -245,8 +260,8 @@ Mux5 mux3(
 EX_MEM EX_MEM(
     .clk_i          (clk_i),
     .rst_i          (rst_i),
-    .memStall_i     (dcache_top.p1_stall_o),    
-    
+    .memStall_i     (dcache.p1_stall_o),
+
     .ALU_Res_i      (ALU.data_o),
     .ALU_Res_o      (),
     .Write_Data_i   (mux7.data_o),
@@ -270,15 +285,15 @@ EX_MEM EX_MEM(
 Data_Memory Data_Memory(
     .clk_i          (clk_i),
     .rst_i          (rst_i),
-    .addr_i         (dcache_top.mem_addr_o),
-    .data_i         (dcache_top.mem_data_o),
-    .enable_i       (dcache_top.mem_enable_o),
-    .write_i        (dcache_top.mem_write_o),
+    .addr_i         (dcache.mem_addr_o),
+    .data_i         (dcache.mem_data_o),
+    .enable_i       (dcache.mem_enable_o),
+    .write_i        (dcache.mem_write_o),
     .ack_o          (),
     .data_o         ()
 );
 
-dcache_top dcache_top(
+dcache_top dcache(
     .clk_i          (clk_i),
     .rst_i          (rst_i),
     .mem_data_i     (Data_Memory.data_o),
@@ -300,12 +315,12 @@ MEM_WB MEM_WB(
     // Inputs
     .clk_i      (clk_i),
     .rst_i      (rst_i),
-    .memStall_i (dcache_top.p1_stall_o),    
-    
+    .memStall_i (dcache.p1_stall_o),
+
     // Pipe in/out
     .ALU_Res_i  (EX_MEM.ALU_Res_o),
     .ALU_Res_o  (),
-    .Read_Data_i(dcache_top.p1_data_o),
+    .Read_Data_i(dcache.p1_data_o),
     .Read_Data_o(),
     .RdAddr_i   (EX_MEM.RdAddr_o),
     .RdAddr_o   (),
