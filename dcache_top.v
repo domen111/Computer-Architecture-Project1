@@ -1,26 +1,26 @@
 module dcache_top
 (
     // System clock, reset and stall
-    input       clk_i;
-    input       rst_i;
+    input       clk_i,
+    input       rst_i,
 
     // to Data Memory interface
-    input [256-1:0]   mem_data_i;
-    input             mem_ack_i;
+    input [256-1:0]   mem_data_i,
+    input             mem_ack_i,
 
-    output  [256-1:0] mem_data_o;
-    output  [32-1:0]  mem_addr_o;
-    output            mem_enable_o;
-    output            mem_write_o;
+    output  [256-1:0] mem_data_o,
+    output  [32-1:0]  mem_addr_o,
+    output            mem_enable_o,
+    output            mem_write_o,
 
     // to CPU interface
-    input [32-1:0]  p1_data_i;
-    input [32-1:0]  p1_addr_i;
-    input           p1_MemRead_i;
-    input           p1_MemWrite_i;
+    input [32-1:0]  p1_data_i,
+    input [32-1:0]  p1_addr_i,
+    input           p1_MemRead_i,
+    input           p1_MemWrite_i,
 
-    output  [32-1:0]p1_data_o;
-    output          p1_stall_o;
+    output  [32-1:0]p1_data_o,
+    output          p1_stall_o
 );
 
 // to SRAM interface
@@ -91,16 +91,22 @@ assign  cache_dirty  = write_hit;
 
 // tag comparator
 //!!! add you code here!  (hit=...?,  r_hit_data=...?)
+assign hit = (sram_tag == p1_tag) & sram_valid;
+assign r_hit_data = sram_cache_data;
 
 // read data :  256-bit to 32-bit
 always@(p1_offset or r_hit_data) begin
     //!!! add you code here! (p1_data=...?)
+    if(hit) begin
+        // p1_data <= r_hit_data; // todo
+    end
 end
 
 
 // write data :  32-bit to 256-bit
 always@(p1_offset or r_hit_data or p1_data_i) begin
     //!!! add you code here! (w_hit_data=...?)
+
 end
 
 
@@ -130,6 +136,7 @@ always@(posedge clk_i or negedge rst_i) begin
                 end
                 else begin          //write allocate: write miss = read miss + write hit; read miss = read miss + read hit
                                     //!!! add you code here!
+                    mem_enable <= 1'b1;
                     state <= STATE_READMISS;
                 end
             end
