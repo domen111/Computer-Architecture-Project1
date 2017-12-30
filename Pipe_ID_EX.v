@@ -53,19 +53,21 @@ always @(posedge clk_i or negedge rst_i) begin
         ALUOp_o <= 0;
     end
     else begin
-        pc_o <= pc_i;
-        data1_o <= data1_i;
-        data2_o <= data2_i;
-        sign_extended_o <= sign_extended_i;
-        instruction_o <= instruction_i;
-        RegDst_o <= RegDst_i;
-        ALUSrc_o <= ALUSrc_i;
-        MemToReg_o <= MemToReg_i;
-        RegWrite_o <= RegWrite_i;
-        MemWrite_o <= MemWrite_i;
-        MemRead_o <=  MemRead_i;
-        ExtOp_o <= ExtOp_i;
-        ALUOp_o <= ALUOp_i;
+        if(!memStall_i) begin
+            pc_o <= pc_i;
+            data1_o <= data1_i;
+            data2_o <= data2_i;
+            sign_extended_o <= sign_extended_i;
+            instruction_o <= instruction_i;
+            RegDst_o <= RegDst_i;
+            ALUSrc_o <= ALUSrc_i;
+            MemToReg_o <= MemToReg_i;
+            RegWrite_o <= RegWrite_i;
+            MemWrite_o <= MemWrite_i;
+            MemRead_o <=  MemRead_i;
+            ExtOp_o <= ExtOp_i;
+            ALUOp_o <= ALUOp_i;
+        end
     end
 end
 

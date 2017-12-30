@@ -38,14 +38,16 @@ always @(posedge clk_i or negedge rst_i) begin
         ExtOp_o <= 0;
     end
     else begin
-        ALU_Res_o <= ALU_Res_i;
-        Write_Data_o <= Write_Data_i;
-        RdAddr_o <= RdAddr_i;
-        MemToReg_o <= MemToReg_i;
-        RegWrite_o <= RegWrite_i;
-        MemWrite_o <= MemWrite_i;
-        MemRead_o <= MemRead_i;
-        ExtOp_o <= ExtOp_i;
+        if(!memStall_i) begin
+            ALU_Res_o <= ALU_Res_i;
+            Write_Data_o <= Write_Data_i;
+            RdAddr_o <= RdAddr_i;
+            MemToReg_o <= MemToReg_i;
+            RegWrite_o <= RegWrite_i;
+            MemWrite_o <= MemWrite_i;
+            MemRead_o <= MemRead_i;
+            ExtOp_o <= ExtOp_i;
+        end
     end
 end
 
