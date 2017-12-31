@@ -79,6 +79,7 @@ initial begin
 
     // Set Input n into data memory at 0x00
     Data_Memory.memory[0] = 256'h5;     // n = 5 for example
+    Data_Memory.state = 1'h0;
 
     Clk = 0;
     Reset = 0;
